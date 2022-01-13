@@ -1,10 +1,8 @@
 from django.urls import path, include
-from .routers import family_router
+from .routers import router
 
 app_name = 'animals'
 
 urlpatterns = [
-    path('', include(family_router.urls)),
+    path('', include(router.urls)),
 ]
-
-

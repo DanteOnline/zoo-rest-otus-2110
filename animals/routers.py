@@ -1,5 +1,7 @@
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter, SimpleRouter
 from .views import FamilyModelViewSet
 
-family_router = DefaultRouter()
-family_router.register(r'families', FamilyModelViewSet)
+router = DefaultRouter()
+# router = SimpleRouter()
+router.register(r'families', FamilyModelViewSet)
+
