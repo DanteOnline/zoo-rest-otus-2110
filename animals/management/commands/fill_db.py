@@ -12,6 +12,7 @@ class Command(BaseCommand):
         Animal.objects.all().delete()
         Kind.objects.all().delete()
         Family.objects.all().delete()
+        User.objects.all().delete()
         # Создание
         family = Family.objects.create(name='Попугай')
         kind = Kind.objects.create(name='Бурый', family=family)
@@ -30,5 +31,10 @@ class Command(BaseCommand):
 
         # Создание админа
         User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
+
+        # Еще несколько видов
+        names = ['Сильный', 'Красивый', 'Умный']
+        for name in names:
+            Kind.objects.create(name=name, family=family)
 
         print('done')

@@ -44,7 +44,7 @@ class Food(models.Model):
 
 class Animal(models.Model):
     name = models.CharField(max_length=64)
-    kind = models.ForeignKey(Kind, on_delete=models.PROTECT)
+    kind = models.ForeignKey(Kind, on_delete=models.CASCADE)
     card = models.OneToOneField(AnimalCard, on_delete=models.CASCADE, blank=True, null=True)
     foods = models.ManyToManyField(Food)
     create = models.DateTimeField(auto_now_add=True)

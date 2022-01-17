@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from .serializers import FamilySerializer
-from .models import Family
+from .serializers import FamilySerializer, KindHyperlinkedModelSerializer
+from .models import Family, Kind
 
 
 class FamilyModelViewSet(ModelViewSet):
@@ -10,3 +10,6 @@ class FamilyModelViewSet(ModelViewSet):
     queryset = Family.objects.all()
 
 
+class KindModelViewSet(ModelViewSet):
+    serializer_class = KindHyperlinkedModelSerializer
+    queryset = Kind.objects.all()

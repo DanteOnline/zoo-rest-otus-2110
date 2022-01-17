@@ -3,29 +3,47 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+from animals import api_views, generic_views, view_sets, filter_views, pagination_views, views
+from rest_framework.routers import DefaultRouter
 
-# from django.contrib.auth.models import User
-# from rest_framework import routers, serializers, viewsets
+# view sets
+router = DefaultRouter()
+router.register(r'base', view_sets.KindViewSet, basename='kind')
+router.register(r'model', view_sets.KindModelViewSet)
+router.register(r'custom', view_sets.KindCustomViewSet)
 
+# filter
+filter_router = DefaultRouter()
+filter_router.register('queryset', filter_views.KindQuerysetFilterViewSet)
+filter_router.register('param', filter_views.KindParamFilterViewSet)
+filter_router.register('django', filter_views.KindDjangoFilterViewSet)
+filter_router.register('custom-django', filter_views.KindCustomDjangoFilterViewSet)
+#
 
-# Serializers define the API representation.
-# class UserSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['url', 'username', 'email', 'is_staff', 'is_superuser']
-#
-#
-# # ViewSets define the view behavior.
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#
-#
-# # Routers provide an easy way of automatically determining the URL conf.
-# router = routers.DefaultRouter()
-# router.register(r'users', UserViewSet)
+# # pagination
+pagination_router = DefaultRouter()
+pagination_router.register('pagenumber', pagination_views.KindPageNumberPaginatonViewSet)
+pagination_router.register('limitoffset', pagination_views.KindLimitOffsetPaginatonViewSet)
 
 urlpatterns = [
+    # API views
+    path('views/api-view/', api_views.KindAPIVIew.as_view()),
+    path('views/func-api-view/', api_views.kind_view),
+    # generic views
+    path('generic/create/', generic_views.KindCreateAPIView.as_view()),
+    path('generic/list/', generic_views.KindListAPIView.as_view()),
+    path('generic/retrieve/<int:pk>/', generic_views.KindRetrieveAPIView.as_view()),
+    path('generic/destroy/<int:pk>/', generic_views.KindDestroyAPIView.as_view()),
+    path('generic/update/<int:pk>/', generic_views.KindUpdateAPIView.as_view()),
+    path('generic/update/<int:pk>/', generic_views.KindUpdateAPIView.as_view()),
+    # view sets
+    path('viewsets/', include(router.urls)),
+    # filters
+    path('filters/', include(filter_router.urls)),
+    path('filters/kwargs/<str:name>/', filter_views.KindKwargsFilterView.as_view()),
+    # pagination
+    path('pagination/', include(pagination_router.urls)),
+    # other
     path('', include('animals.urls')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
