@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from rest_framework.authtoken.models import Token
 from animals.models import Family, Animal, Kind, Food
 
 
@@ -30,7 +31,21 @@ class Command(BaseCommand):
         animal.save()
 
         # Создание админа
-        User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
+        admin=User.objects.create_superuser('admin', 'admin@admin.com', 'admin123456')
+        token = Token.objects.create(user=admin)
+        print(token)
+
+        pavel = User.objects.create_user('pavel', 'pavel@admin.com', 'admin123456')
+        token = Token.objects.create(user=pavel)
+        print(token)
+
+        oleg = User.objects.create_user('oleg', 'oleg@admin.com', 'admin123456')
+        token = Token.objects.create(user=oleg)
+        print(token)
+
+        group_names = ['Младшие сотрудники', 'Старшие сотрудники']
+        for name in group_names:
+            Group.objects.get_or_create(name=name)
 
         # Еще несколько видов
         names = ['Сильный', 'Красивый', 'Умный']
