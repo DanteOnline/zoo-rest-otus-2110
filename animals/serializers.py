@@ -24,3 +24,9 @@ class KindHyperlinkedModelSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Kind
         fields = '__all__'
+
+
+class KindSerializerBase(ModelSerializer):
+    class Meta:
+        model = Kind
+        fields = ('name',)

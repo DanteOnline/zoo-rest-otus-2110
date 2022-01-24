@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from .serializers import FamilySerializer, KindHyperlinkedModelSerializer
+from .serializers import FamilySerializer, KindHyperlinkedModelSerializer, KindSerializerBase
 from .models import Family, Kind
 
 
@@ -13,3 +13,8 @@ class FamilyModelViewSet(ModelViewSet):
 class KindModelViewSet(ModelViewSet):
     serializer_class = KindHyperlinkedModelSerializer
     queryset = Kind.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.version == '2.0':
+            return KindSerializerBase
+        return KindHyperlinkedModelSerializer

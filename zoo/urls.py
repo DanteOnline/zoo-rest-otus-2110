@@ -1,14 +1,17 @@
 import debug_toolbar
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework.authtoken.views import obtain_auth_token
 
 from animals import api_views, generic_views, view_sets, filter_views, pagination_views, views
 from rest_framework.routers import DefaultRouter
+from .doc_schemas import schema_view
 
 # view sets
+from users.views import UserListAPIView
+
 router = DefaultRouter()
 router.register(r'base', view_sets.KindViewSet, basename='kind')
 router.register(r'model', view_sets.KindModelViewSet)
@@ -50,7 +53,19 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
     path('api-auth/', include('rest_framework.urls')),
-    path('api-token-auth/', obtain_auth_token)
+    path('api-token-auth/', obtain_auth_token),
+    # versioning
+    # (IN URL)
+    re_path(r'^api/(?P<version>\d+\.\d+)/users/$', UserListAPIView.as_view()),
+    # (NAMESPACE)
+    path('api/users/0.1', include('users.urls', namespace='0.1')),
+    path('api/users/0.2', include('users.urls', namespace='0.2')),
+    # Еще есть HostNameVersioning
+    # http://v1.example.com/bookings/.
+    # docs
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
