@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_filters',
     'rest_framework.authtoken',
+    'graphene_django',
     # my
     'animals',
 ]
@@ -145,4 +146,8 @@ REST_FRAMEWORK = {
     # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+}
+
+GRAPHENE = {
+    'SCHEMA': 'zoo.schema.schema'
 }
