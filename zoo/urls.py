@@ -9,6 +9,7 @@ from graphene_django.views import GraphQLView
 from animals import api_views, generic_views, view_sets, filter_views, pagination_views, views
 from rest_framework.routers import DefaultRouter
 from .doc_schemas import schema_view
+from animals_with_tests.views import index_view, FamilyViewSet, FamilyPermissionViewSet
 
 # view sets
 from users.views import UserListAPIView
@@ -30,6 +31,11 @@ filter_router.register('custom-django', filter_views.KindCustomDjangoFilterViewS
 pagination_router = DefaultRouter()
 pagination_router.register('pagenumber', pagination_views.KindPageNumberPaginatonViewSet)
 pagination_router.register('limitoffset', pagination_views.KindLimitOffsetPaginatonViewSet)
+
+# testing
+router_testing = DefaultRouter()
+router_testing.register('api', FamilyViewSet)
+router_testing.register('permission', FamilyPermissionViewSet)
 
 urlpatterns = [
     # API views
@@ -69,6 +75,9 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     # graph ql
     path('graphql/', GraphQLView.as_view(graphiql=True)),
+    # tests
+    path('awt/', index_view),
+    path('awt/', include(router_testing.urls)),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
